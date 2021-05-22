@@ -22,8 +22,8 @@ const FLUTE_ME_COMMAND = "flute-me";
  * received from Discord
  */
 client.on('ready', () => {
-    console.log('Gisèle à lancé le module ping')
-})
+    console.log("Gisèle à lancé le module ping");
+});
 
 // Create an event listener for messages
 client.on("message", message => {
