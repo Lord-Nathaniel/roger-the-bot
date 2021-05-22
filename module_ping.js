@@ -41,14 +41,13 @@ client.on("message", message => {
         // Send "ara ara" to the same channel
         message.channel.send('cool ta vie');
     }
-    //give the "flutted" role
+    //give an heart emoji
     if (message.content === "j'aime les castors") {
         message.react("\u{1F499}");
     }
-    //give an heart emoji
-    if (message.content === 'cool ça marche') {
-        // Send "ara ara" to the same channel
-        message.channel.send('cool ta vie');
+    //give the "flutted" role
+    if (message.content === `${ BOT_PREFIX }${ FLUTE_ME_COMMAND }`) {
+        fluteUser(message.member);
     }
 });
 
