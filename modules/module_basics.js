@@ -1,3 +1,16 @@
+//module basics
+//ce module est une compilation de commandes de bases utilisées pour divers exercices
+/*commandes : 
+ * $ping || $test : bot répond par "ewo!"
+ * $servers : compte la quantité de membres du channel
+ * $cc || $clearchannel : supprime tous les messages du channelId
+ * $status <message> : set le status du bot en
+ * $j'aime les castors : répond à la ligne de commande par un emoji
+ * $fluteMe : donne le rôle "fluted" à celui qui à envoyé la commande
+ * 
+ * note : affiche un message en cas de suppression de message du channel
+ */
+
 const command = require('../command');
 
 module.exports = (client) => {
