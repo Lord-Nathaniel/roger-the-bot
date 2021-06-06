@@ -6,7 +6,6 @@
  */
 
 const mongo = require('../mongo');
-const command = require('../command');
 const messageCountSchema = require('../schemas/message_count_schema');
 
 module.exports = (client) => {
