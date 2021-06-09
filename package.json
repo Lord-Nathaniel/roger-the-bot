@@ -1,30 +1,34 @@
 {
-  "name": "gisele",
-  "version": "1.0.0",
-  "main": "module_ping.js",
-  "scripts": {
-    "ping": "node module_ping.js",
-    "devPing": "nodemon module_ping.js",
-    "emoji": "node module_emoji.js",
-    "devEmoji": "nodemon module_emoji.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^12.5.3",
-    "dotenv": "^9.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.7"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Lord-Nathaniel/roger-the-bot.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Lord-Nathaniel/roger-the-bot/issues"
-  },
-  "homepage": "https://github.com/Lord-Nathaniel/roger-the-bot#readme",
-  "description": ""
+    "name": "gisele",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "devIndex": "nodemon index.js",
+        "ping": "node modules/module_ping.js",
+        "devPing": "nodemon modules/module_ping.js",
+        "emoji": "node modules/module_emoji.js",
+        "devEmoji": "nodemon modules/module_emoji.js",
+        "card": "node modules/module_card.js",
+        "devCard": "nodemon modules/module_card.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^12.5.3",
+        "dotenv": "^9.0.1",
+        "mongoose": "^5.12.13"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Lord-Nathaniel/roger-the-bot.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Lord-Nathaniel/roger-the-bot/issues"
+    },
+    "homepage": "https://github.com/Lord-Nathaniel/roger-the-bot#readme",
+    "description": ""
 }
