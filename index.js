@@ -12,6 +12,7 @@ const basics = require('./modules/module_basics');
 const welcome = require('./modules/module_welcome');
 const messageCount = require('./modules/module_message_counter');
 const resources = require('./modules/module_resources');
+const compose = require('./modules/module_img_compose');
 
 /*********** [ FUNCTION WHEN PLAYING ] **********/
 client.on('ready', async() => {
@@ -21,6 +22,7 @@ client.on('ready', async() => {
     welcome(client);
     // messageCount(client);
     resources(client);
+    compose(client);
 });
 
 /*********** [ FUNCTION WHEN DISCONNECTING ] **********/

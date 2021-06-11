@@ -13,7 +13,9 @@ const userSchema = require('../schemas/user_schema');
 const RESOURCE_TABLE = ["rouge", "orange", "jaune", "vert", "bleu", "violet"];
 
 module.exports = (client) => {
+
     /** ***************************************************** COMMAND $booster ***************************************************** */
+
     command(client, 'booster', async message => {
         const guildId = message.guild.id;
         const userId = message.author.id;
@@ -32,60 +34,75 @@ module.exports = (client) => {
 
         await mongo().then(async mongoose => {
             try {
-                console.log('Searching the user...');
 
-                const result = await userSchema.findOne({
-                    guildId,
-                    userId
-                });
+                let userCreated = false;
+                let messageCreated = false;
+                let result;
 
-                if (result) {
-                    //TODO le profil existed
-                    console.log('User found !');
+                do {
 
-                    await userSchema.findOneAndUpdate({
+                    console.log('Searching the user...');
+
+                    result = await userSchema.findOne({
                         guildId,
                         userId
-                    }, {
-                        $inc: {
-                            "resources.rouge": tempBooster[0],
-                            "resources.orange": tempBooster[1],
-                            "resources.jaune": tempBooster[2],
-                            "resources.vert": tempBooster[3],
-                            "resources.bleu": tempBooster[4],
-                            "resources.violet": tempBooster[5]
-                        }
-                    }, {
-                        upsert: true //if this exist : update it //else : insert it
                     });
-                    return;
 
+                    if (result) {
 
-                } else {
-                    console.log('Creating the user...');
+                        console.log('User found !');
 
-                    await new userSchema({
-                        guildId,
-                        userId,
-                        resources: {
-                            rouge: 0,
-                            orange: 0,
-                            jaune: 0,
-                            vert: 0,
-                            bleu: 0,
-                            violet: 0
-                        },
-                        objects: {
-                            o_arrosoir: false,
-                            t_fermier: false
-                        },
-                        cards: {
-                            s_stardew: false
-                        }
-                    }).save();
-                    message.reply("Utilisateur créé ! Vous pouvez retaper votre commande");
-                    return;
+                        await userSchema.findOneAndUpdate({
+                            guildId,
+                            userId
+                        }, {
+                            $inc: {
+                                "resources.rouge": tempBooster[0],
+                                "resources.orange": tempBooster[1],
+                                "resources.jaune": tempBooster[2],
+                                "resources.vert": tempBooster[3],
+                                "resources.bleu": tempBooster[4],
+                                "resources.violet": tempBooster[5]
+                            }
+                        }, {
+                            upsert: true //if this exist : update it //else : insert it
+                        });
+
+                        userCreated = true;
+
+                    } else {
+                        console.log('Creating the user...');
+
+                        await new userSchema({
+                            guildId,
+                            userId,
+                            resources: {
+                                rouge: 0,
+                                orange: 0,
+                                jaune: 0,
+                                vert: 0,
+                                bleu: 0,
+                                violet: 0
+                            },
+                            objects: {
+                                o_arrosoir: false,
+                                t_fermier: false
+                            },
+                            cards: {
+                                s_stardew: false
+                            }
+                        }).save();
+                        messageCreated = true;
+                    }
+
+                } while (!userCreated);
+
+                if (messageCreated) {
+                    message.reply("votre compte a été créé ! Votre inventaire est vide");
                 }
+                // } else if (!messageCreated) {
+                //     message.reply(`Votre liste de peinture : \n ${result.resources.rouge} peinture rouge, \n ${result.resources.orange} peinture orange, \n ${result.resources.jaune} peinture jaune, \n ${result.resources.vert} peinture vert, \n ${result.resources.bleu} peinture bleu, \n ${result.resources.violet} peinture violet, \n`);
+                // };
 
             } finally {
                 mongoose.connection.close();
@@ -101,44 +118,58 @@ module.exports = (client) => {
 
         await mongo().then(async mongoose => {
             try {
-                console.log('Searching the user...');
 
-                const result = await userSchema.findOne({
-                    guildId,
-                    userId
-                });
+                let userCreated = false;
+                let messageCreated = false;
+                let result;
 
-                if (result) {
-                    //TODO le profil existed
-                    console.log('User found !');
+                do {
 
-                    message.reply(`Votre liste de peinture : \n ${result.resources.rouge} peinture rouge, \n ${result.resources.orange} peinture orange, \n ${result.resources.jaune} peinture jaune, \n ${result.resources.vert} peinture vert, \n ${result.resources.bleu} peinture bleu, \n ${result.resources.violet} peinture violet, \n`);
+                    console.log('Searching the user...');
 
-                } else {
-                    console.log('Creating the user...');
-
-                    await new userSchema({
+                    result = await userSchema.findOne({
                         guildId,
-                        userId,
-                        resources: {
-                            rouge: 0,
-                            orange: 0,
-                            jaune: 0,
-                            vert: 0,
-                            bleu: 0,
-                            violet: 0
-                        },
-                        objects: {
-                            o_arrosoir: false,
-                            t_fermier: false
-                        },
-                        cards: {
-                            s_stardew: false
-                        }
-                    }).save();
-                    message.reply("Utilisateur créé ! Vous pouvez retaper votre commande");
-                    return;
-                }
+                        userId
+                    });
+
+                    if (result) {
+
+                        console.log('User found !');
+
+                        userCreated = true;
+
+                    } else {
+                        console.log('Creating the user...');
+
+                        await new userSchema({
+                            guildId,
+                            userId,
+                            resources: {
+                                rouge: 0,
+                                orange: 0,
+                                jaune: 0,
+                                vert: 0,
+                                bleu: 0,
+                                violet: 0
+                            },
+                            objects: {
+                                o_arrosoir: false,
+                                t_fermier: false
+                            },
+                            cards: {
+                                s_stardew: false
+                            }
+                        }).save();
+                        messageCreated = true;
+                    }
+
+                } while (!userCreated);
+
+                if (messageCreated) {
+                    message.reply("votre compte a été créé ! Votre inventaire est vide");
+                } else if (!messageCreated) {
+                    message.reply(`Votre liste de peinture : \n ${result.resources.rouge} peinture rouge, \n ${result.resources.orange} peinture orange, \n ${result.resources.jaune} peinture jaune, \n ${result.resources.vert} peinture vert, \n ${result.resources.bleu} peinture bleu, \n ${result.resources.violet} peinture violet, \n`);
+                };
 
             } finally {
                 mongoose.connection.close();
@@ -146,10 +177,200 @@ module.exports = (client) => {
         });
     });
 
+    /** ***************************************************** COMMAND $combine ***************************************************** */
+
+    command(client, 'combine', async message => {
+        const guildId = message.guild.id;
+        const userId = message.author.id;
+        const content = message.content;
+
+        await mongo().then(async mongoose => {
+            try {
+
+                let userCreated = false;
+                let messageCreated = false;
+                let result;
+
+                do {
+
+                    console.log('Searching the user...');
+
+                    result = await userSchema.findOne({
+                        guildId,
+                        userId
+                    });
+
+                    if (result) {
+
+                        /* INSERT HERE THE FUNCTION */
+
+                        console.log('User found !');
+
+                        const split = content.split(' ');
+                        split.shift();
+                        text = split.join(' ');
+
+                        if (text == '') {
+                            message.reply('mettez les ressources que vous souhaitez combiner !');
+                            return;
+                        }
+
+                        if (text.includes('test')) {
+                            message.reply('test réussi');
+                            return;
+                        }
+
+                        if (text.includes('rouge') && text.includes('orange')) {
+                            if (result.resources.rouge > 0 && result.resources.orange > 0) {
+                                message.reply('vous avez les ressources pour la combinaison');
+
+                                await userSchema.findOneAndUpdate({
+                                    guildId,
+                                    userId
+                                }, {
+                                    $inc: {
+                                        "resources.rouge": -1,
+                                        "resources.orange": -1
+                                    }
+                                }, {
+                                    upsert: true //if this exist : update it //else : insert it
+                                });
+
+                            }
+                            if (result.resources.rouge == 0 || result.resources.orange == 0) {
+                                if (result.resources.rouge == 0) {
+                                    message.reply("vous n'avez pas de peinture rouge");
+                                }
+                                if (result.resources.orange == 0) {
+                                    message.reply("vous n'avez pas de peinture orange");
+                                }
+                            }
+                        }
+
+                        console.log("contenu de text :");
+                        console.log(text);
+                        console.log("contenu de split :");
+                        console.log(split);
+
+                        userCreated = true;
+
+                    } else {
+                        console.log('Creating the user...');
+
+                        await new userSchema({
+                            guildId,
+                            userId,
+                            resources: {
+                                rouge: 0,
+                                orange: 0,
+                                jaune: 0,
+                                vert: 0,
+                                bleu: 0,
+                                violet: 0
+                            },
+                            objects: {
+                                o_arrosoir: false,
+                                t_fermier: false
+                            },
+                            cards: {
+                                s_stardew: false
+                            }
+                        }).save();
+                        messageCreated = true;
+                    }
+
+                }
+                while (!userCreated);
 
 
+                /* INSERT HERE THE MESSAGES */
+                if (messageCreated) {
+                    message.reply("votre compte a été créé ! Votre inventaire est vide");
+                }
+                // } else if (!messageCreated) {
+                //     message.reply(`Votre liste de peinture : \n ${result.resources.rouge} peinture rouge, \n ${result.resources.orange} peinture orange, \n ${result.resources.jaune} peinture jaune, \n ${result.resources.vert} peinture vert, \n ${result.resources.bleu} peinture bleu, \n ${result.resources.violet} peinture violet, \n`);
+                // };
 
-}
+            } finally {
+                mongoose.connection.close();
+            }
+        });
+    });
+
+};
+
+/** ***************************************************** BLANK COMMAND ***************************************************** */
+
+// command(client, 'command', async message => {
+//     const guildId = message.guild.id;
+//     const userId = message.author.id;
+
+//     await mongo().then(async mongoose => {
+//         try {
+
+//             let userCreated = false;
+//             let messageCreated = false;
+//             let result;
+
+//             do {
+
+//                 console.log('Searching the user...');
+
+//                 result = await userSchema.findOne({
+//                     guildId,
+//                     userId
+//                 });
+
+//                 if (result) {
+
+//                     /* INSERT HERE THE FUNCTION */ 
+
+//                     console.log('User found !');
+
+//                     userCreated = true;
+
+//                 } else {
+//                     console.log('Creating the user...');
+
+//                     await new userSchema({
+//                         guildId,
+//                         userId,
+//                         resources: {
+//                             rouge: 0,
+//                             orange: 0,
+//                             jaune: 0,
+//                             vert: 0,
+//                             bleu: 0,
+//                             violet: 0
+//                         },
+//                         objects: {
+//                             o_arrosoir: false,
+//                             t_fermier: false
+//                         },
+//                         cards: {
+//                             s_stardew: false
+//                         }
+//                     }).save();
+//                     messageCreated = true;
+//                 }
+
+//             } while (!userCreated);
+
+
+//             /* INSERT HERE THE MESSAGES */
+//             if (messageCreated) {
+//                 message.reply("votre compte a été créé ! Votre inventaire est vide");
+//             } else if (!messageCreated) {
+//                 message.reply(`Votre liste de peinture : \n ${result.resources.rouge} peinture rouge, \n ${result.resources.orange} peinture orange, \n ${result.resources.jaune} peinture jaune, \n ${result.resources.vert} peinture vert, \n ${result.resources.bleu} peinture bleu, \n ${result.resources.violet} peinture violet, \n`);
+//             };
+
+//         } finally {
+//             mongoose.connection.close();
+//         }
+//     });
+// });
+
+
 
 /* const userSchema = mongoose.Schema({
     _id: reqString,
@@ -170,29 +391,3 @@ module.exports = (client) => {
         s_stardew: Boolean
     }
 }); */
-
-async function createUser() {
-    //TODO il faut creer le profil
-    console.log('Creating the user...');
-
-    await new userSchema({
-        guildId,
-        userId,
-        resources: {
-            rouge: 0,
-            orange: 0,
-            jaune: 0,
-            vert: 0,
-            bleu: 0,
-            violet: 0
-        },
-        objects: {
-            o_arrosoir: false,
-            t_fermier: false
-        },
-        cards: {
-            s_stardew: false
-        }
-    }).save();
-    return;
-}
